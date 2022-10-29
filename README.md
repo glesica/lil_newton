@@ -21,8 +21,11 @@ NEWLOGO - https://www.proquest.com/docview/2372037584
 
 `color <color>` - set the color your turtle draws as it moves
 
-`move <direction> <force>` - attempt to move your turtle in the given
-direction with the given force
+`move <force>` - attempt to move your turtle forward with the given force
+
+`head <heading>` - rotate your turtle to the given heading
+
+`turn <direction> <degrees>` - turn in the given direction by the given amount
 
 ### Definitions
 
@@ -31,7 +34,11 @@ direction with the given force
 
 <color> ::= 'black' | 'white' | 'red' | 'green' | 'blue'
 
-<direction> ::= <number> | <cardinal>
+<degrees> ::= <number>
+
+<direction> ::= 'left' | 'right'
+
+<heading> ::= <degrees> | <cardinal>
 
 <force> ::= <number>
 
