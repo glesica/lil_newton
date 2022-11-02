@@ -2,4 +2,4 @@
 
 set -e
 
-esbuild src/game.ts --bundle --outdir=web/ --servedir=web/
+esbuild src/game.ts --bundle --sourcemap --outdir=web/ --servedir=web/
