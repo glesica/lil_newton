@@ -27,6 +27,8 @@ NEWLOGO - https://www.proquest.com/docview/2372037584
 
 `turn <direction> <degrees>` - turn in the given direction by the given amount
 
+`wait` - wait for all previous commands to complete before proceeding
+
 ### Definitions
 
 ```
