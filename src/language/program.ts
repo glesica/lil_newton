@@ -1,9 +1,9 @@
 import {Instruction} from "./instruction";
 
 export class Program {
-    readonly commands: Array<Instruction>
+    readonly instructions: Array<Instruction>
 
     constructor(commands: Array<Instruction>) {
-        this.commands = commands;
+        this.instructions = commands;
     }
 }

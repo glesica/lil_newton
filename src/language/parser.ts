@@ -9,9 +9,10 @@ import {Instruction} from "./instruction";
 import {commandParser} from "./command";
 import {newlineParser} from "./newline";
 import {Program} from "./program";
+import {Parameter} from "./parameter";
 
 const instruction = commandParser.bind(c => {
-    return any<any, Token<LNToken>>(
+    return any<Parameter, Token<LNToken>>(
         cardinalParser,
         colorParser,
         directionParser,
@@ -25,8 +26,9 @@ const root = instruction
     .oneOrMoreSeparatedBy(newlineParser)
     .map(i => new Program(i));
 
-export function parseProgram(program: string) {
-    const tokens = lexerInput("foo N S Blue 5 7.2\nfoo Left N 3", lnLexer, eofToken);
-    console.log(tokens);
-    console.log(parse(root, tokens));
+export function parseProgram(program: string): Program {
+    const tokens = lexerInput(program, lnLexer, eofToken);
+    const ast = parse(root, tokens);
+    console.log(ast);
+    return ast;
 }

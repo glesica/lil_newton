@@ -21,9 +21,9 @@ NEWLOGO - https://www.proquest.com/docview/2372037584
 
 `color <color>` - set the color your turtle draws as it moves
 
-`move <force>` - attempt to move your turtle forward with the given force
-
 `head <heading>` - rotate your turtle to the given heading
+
+`thrust <force> <seconds>` - attempt to move your turtle forward with the given force
 
 `turn <direction> <degrees>` - turn in the given direction by the given amount
 
@@ -43,6 +43,8 @@ NEWLOGO - https://www.proquest.com/docview/2372037584
 <heading> ::= <degrees> | <cardinal>
 
 <force> ::= <number>
+
+<seconds> ::= <number>
 
 <number> ::= [0-9]+
 ```

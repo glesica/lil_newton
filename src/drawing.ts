@@ -7,7 +7,9 @@ import {
 import {Turtle} from "./turtle";
 
 export class Drawing extends Scene {
-    private readonly points: Array<Vector> = [];
+    private points: Array<Vector> = [];
+
+    private lineColor: Color = Color.DarkGray;
 
     constructor(turtle: Turtle) {
         super();
@@ -30,6 +32,10 @@ export class Drawing extends Scene {
         })
     }
 
+    setLineColor(color: Color) {
+        this.lineColor = color;
+    }
+
     onPostDraw(ctx: ExcaliburGraphicsContext, _delta: number) {
         super.onPostDraw(ctx, _delta);
 
@@ -39,7 +45,7 @@ export class Drawing extends Scene {
         for (let i = 0; i < this.points.length - 1; i++) {
             const start = this.points[i];
             const end = this.points[i+1];
-            ctx.drawLine(start, end, Color.DarkGray, 1);
+            ctx.drawLine(start, end, this.lineColor, 1);
         }
 
         ctx.restore();

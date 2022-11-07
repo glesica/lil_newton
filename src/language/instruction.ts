@@ -1,8 +1,8 @@
-// export type Command = 'color' | 'move' | 'head' | 'turn' | 'wait';
+import {Parameter} from "./parameter";
 
 export class Instruction {
     readonly name: string
-    readonly args: Array<any>
+    readonly args: Array<Parameter>
 
     constructor(name: string, args: Array<any>) {
         this.name = name;

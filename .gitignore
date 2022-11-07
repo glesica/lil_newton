@@ -1,4 +1,2 @@
 .idea/
-web/*.js
-web/*.js.map
-
+.DS_Store

@@ -2,42 +2,39 @@ import {Engine, Physics, vec} from 'excalibur';
 
 import {Turtle} from "./turtle";
 import {Drawing} from "./drawing";
+import {Interpreter} from "./language/interpreter";
 
 // Physics.useRealisticPhysics();
 
-const game = new Engine({
-    width: 800,
-    height: 600,
-});
+let code = "";
 
 const turtle = new Turtle(25);
 const drawing = new Drawing(turtle);
+const interpreter = new Interpreter(turtle, drawing);
+
+const codeArea = document.getElementById("code-box") as HTMLTextAreaElement;
+codeArea.onkeyup = (e) => {
+    const area = e.target as HTMLTextAreaElement;
+    code = area.value;
+    console.log(code);
+}
+
+const runButton = document.getElementById("run-btn") as HTMLButtonElement;
+runButton.onclick = (e) => {
+    interpreter.run(code);
+}
+
+const game = new Engine({
+    width: 640,
+    height: 480,
+    canvasElementId: "game",
+});
 
 game.addScene('drawing', drawing);
 game.goToScene('drawing');
 
 game.start().then(() => {
     setTimeout(() => {
-        turtle.rotateBy(0.25 * Math.PI);
-        turtle.thrust(10, 3);
-    }, 1000);
-    setTimeout(() => {
-        turtle.rotateBy(0.25 * Math.PI);
-        turtle.thrust(15, 2);
-    }, 4000);
-    setTimeout(() => {
-        turtle.rotateBy(0.5 * Math.PI);
-        turtle.thrust(25, 3);
-    }, 6000);
-    setTimeout(() => {
-        turtle.rotateBy(0.5 * Math.PI);
-        turtle.thrust(25, 3);
-    }, 9000);
-    setTimeout(() => {
-        turtle.rotateBy(0.5 * Math.PI);
-        turtle.thrust(25, 3);
-    }, 12000);
-    setTimeout(() => {
         game.stop();
-    }, 20000);
+    }, 10000)
 });
