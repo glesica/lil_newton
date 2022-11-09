@@ -10,6 +10,8 @@ export class Interpreter {
     private readonly drawing: Drawing;
     private readonly turtle: Turtle;
 
+    private tasks: Array<Promise<void>> = [];
+
     constructor(turtle: Turtle, drawing: Drawing) {
         this.turtle = turtle;
         this.drawing = drawing;
@@ -19,33 +21,33 @@ export class Interpreter {
         return this.drawing;
     }
 
-    run(program: string) {
+    async run(program: string) {
         const programTree = parseProgram(program);
-        this.execute(programTree);
+        await this.execute(programTree);
     }
 
-    execute(program: Program) {
+    async execute(program: Program) {
         for (const instruction of program.instructions) {
-            this.executeInstruction(instruction);
+            await this.executeInstruction(instruction);
         }
     }
 
-    executeInstruction(instruction: Instruction) {
+    async executeInstruction(instruction: Instruction) {
         switch (instruction.name) {
             case "color":
                 this.executeColor(instruction);
                 break;
             case "head":
-                this.executeHead(instruction);
+                await this.executeHead(instruction);
                 break;
             case "thrust":
-                this.executeThrust(instruction);
+                await this.executeThrust(instruction);
                 break;
             case "turn":
-                this.executeTurn(instruction);
+                await this.executeTurn(instruction);
                 break;
             case "wait":
-                this.executeWait(instruction);
+                await this.executeWait(instruction);
                 break;
             default:
                 throw new Error(`instruction ${instruction.name} not found`);
@@ -82,28 +84,30 @@ export class Interpreter {
         // this.drawing.setLineColor(colorValue.value);
     }
 
-    executeHead(instruction: Instruction) {
+    async executeHead(instruction: Instruction) {
         verifyArgs(instruction, [NumberValue.hasType]);
 
         const delta = (instruction.args[0] as NumberValue).value - this.turtle.rotation;
         this.turtle.rotateBy(delta);
     }
 
-    executeThrust(instruction: Instruction) {
+    async executeThrust(instruction: Instruction) {
         verifyArgs(instruction, [NumberValue.hasType, NumberValue.hasType]);
 
         const force = (instruction.args[0] as NumberValue).value;
         const duration = (instruction.args[1] as NumberValue).value;
 
-        this.turtle.thrust(force, duration);
+        await this.turtle.thrust(force, duration);
     }
 
-    executeTurn(instruction: Instruction) {
+    async executeTurn(instruction: Instruction) {
         verifyArgs(instruction, [DirectionValue.hasType, NumberValue.hasType]);
     }
 
-    executeWait(instruction: Instruction) {
+    async executeWait(instruction: Instruction) {
         verifyArgs(instruction, []);
+        await Promise.all(this.tasks);
+        this.tasks = [];
     }
 }
 
