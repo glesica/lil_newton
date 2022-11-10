@@ -1,8 +1,4 @@
-import {
-    Color,
-    ExcaliburGraphicsContext, PostUpdateEvent, Scene,
-    Vector,
-} from "excalibur";
+import {Color, ExcaliburGraphicsContext, PostUpdateEvent, Scene, Vector,} from "excalibur";
 
 import {Turtle} from "./turtle";
 
@@ -29,7 +25,7 @@ export class Drawing extends Scene {
                 this.points.push(pos);
                 return;
             }
-        })
+        });
     }
 
     setLineColor(color: Color) {

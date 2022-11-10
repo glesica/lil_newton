@@ -1,6 +1,9 @@
 import {Actor, CollisionType, Color, Engine, Polygon, PolygonCollider, vec} from "excalibur";
 
 export class Turtle extends Actor {
+    // Rotation speed in radians per second.
+    private rotationSpeed: number = 1.0;
+
     constructor(size: number) {
         const halfSize = size / 2;
         const points = [
@@ -30,12 +33,19 @@ export class Turtle extends Actor {
         this.pos.y = engine.halfDrawHeight;
     }
 
-    // TODO: Rotate in realtime instead of instantly
-    rotateBy(delta: number) {
-        this.rotation = (this.rotation + delta) % (2 * Math.PI);
+    async rotateBy(deltaDegrees: number): Promise<void> {
+        return new Promise<void>((resolve, _reject) => {
+            const deltaRadians = deltaDegrees / 180 * Math.PI;
+            this.actions.rotateBy(deltaRadians, this.rotationSpeed);
+
+            const seconds = Math.abs(deltaRadians) * this.rotationSpeed;
+            setTimeout(() => {
+                resolve();
+            }, seconds);
+        });
     }
 
-    thrust(force: number, time: number): Promise<void> {
+    async thrust(force: number, time: number): Promise<void> {
         return new Promise<void>((resolve, _reject) => {
             const delta = vec(0, -force).rotate(this.rotation);
             this.acc.addEqual(delta);

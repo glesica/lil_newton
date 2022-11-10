@@ -36,7 +36,7 @@ export class Simulation {
             this.interpreter.run(this.code).then(() => {
                 this.game.stop();
                 console.log('game stopped');
-            })
+            });
         }
 
         this.game.start().then(() => {

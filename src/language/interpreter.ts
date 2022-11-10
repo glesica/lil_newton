@@ -88,7 +88,7 @@ export class Interpreter {
         verifyArgs(instruction, [NumberValue.hasType]);
 
         const delta = (instruction.args[0] as NumberValue).value - this.turtle.rotation;
-        this.turtle.rotateBy(delta);
+        await this.turtle.rotateBy(delta);
     }
 
     async executeThrust(instruction: Instruction) {
@@ -102,6 +102,18 @@ export class Interpreter {
 
     async executeTurn(instruction: Instruction) {
         verifyArgs(instruction, [DirectionValue.hasType, NumberValue.hasType]);
+
+        const direction = (instruction.args[0] as DirectionValue).value;
+        const delta = (instruction.args[1] as NumberValue).value;
+
+        switch (direction) {
+            case 'Left':
+                await this.turtle.rotateBy(-delta);
+                break;
+            case 'Right':
+                await this.turtle.rotateBy(delta);
+                break;
+        }
     }
 
     async executeWait(instruction: Instruction) {
