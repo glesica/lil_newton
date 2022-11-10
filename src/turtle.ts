@@ -33,6 +33,10 @@ export class Turtle extends Actor {
         this.pos.y = engine.halfDrawHeight;
     }
 
+    get rotationInDegrees(): number {
+        return this.rotation / Math.PI * 180;
+    }
+
     async rotateBy(deltaDegrees: number): Promise<void> {
         return new Promise<void>((resolve, _reject) => {
             const deltaRadians = deltaDegrees / 180 * Math.PI;

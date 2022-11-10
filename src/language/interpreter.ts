@@ -87,7 +87,7 @@ export class Interpreter {
     async executeHead(instruction: Instruction) {
         verifyArgs(instruction, [NumberValue.hasType]);
 
-        const delta = (instruction.args[0] as NumberValue).value - this.turtle.rotation;
+        const delta = (instruction.args[0] as NumberValue).value - this.turtle.rotationInDegrees;
         await this.turtle.rotateBy(delta);
     }
 
