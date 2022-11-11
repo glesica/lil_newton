@@ -44,7 +44,6 @@ export class Turtle extends Actor {
 
             const seconds = Math.abs(deltaRadians) * this.rotationSpeed;
             setTimeout(() => {
-                console.log(seconds);
                 resolve();
             }, seconds*1000);
         });

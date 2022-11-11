@@ -29,6 +29,5 @@ const root = instruction
 export function parseProgram(program: string): Program {
     const tokens = lexerInput(program, lnLexer, eofToken);
     const ast = parse(root, tokens);
-    console.log(ast);
     return ast;
 }
