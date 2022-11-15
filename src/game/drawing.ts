@@ -3,9 +3,9 @@ import {Color, ExcaliburGraphicsContext, PostUpdateEvent, Scene, Vector,} from "
 import {Turtle} from "./turtle";
 
 export class Drawing extends Scene {
-    private points: Array<Vector> = [];
+    private points: Array<Vector|Color> = [];
 
-    private lineColor: Color = Color.DarkGray;
+    private prevPoint?: Vector;
 
     constructor(turtle: Turtle) {
         super();
@@ -17,10 +17,11 @@ export class Drawing extends Scene {
 
             if (this.points.length == 0) {
                 this.points.push(pos);
+                this.prevPoint = pos;
                 return;
             }
 
-            const dist = pos.distance(this.points[this.points.length-1]);
+            const dist = pos.distance(this.prevPoint);
             if (dist > 3) {
                 this.points.push(pos);
                 return;
@@ -29,7 +30,7 @@ export class Drawing extends Scene {
     }
 
     setLineColor(color: Color) {
-        this.lineColor = color;
+        this.points.push(color);
     }
 
     onPostDraw(ctx: ExcaliburGraphicsContext, _delta: number) {
@@ -38,10 +39,17 @@ export class Drawing extends Scene {
         ctx.save();
         ctx.z = -1;
 
+        let color = Color.DarkGray;
         for (let i = 0; i < this.points.length - 1; i++) {
-            const start = this.points[i];
-            const end = this.points[i+1];
-            ctx.drawLine(start, end, this.lineColor, 1);
+            const item = this.points[i];
+            if (item instanceof Color) {
+                color = item;
+                continue;
+            }
+
+            const start = this.points[i] as Vector;
+            const end = this.points[i+1] as Vector;
+            ctx.drawLine(start, end, color, 1);
         }
 
         ctx.restore();

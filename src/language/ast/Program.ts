@@ -1,4 +1,4 @@
-import {Instruction} from "./instruction";
+import {Instruction} from "./Instruction";
 
 export class Program {
     readonly instructions: Array<Instruction>

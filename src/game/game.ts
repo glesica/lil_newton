@@ -1,7 +1,7 @@
 import {Engine} from "excalibur";
 import {Turtle} from "./turtle";
 import {Drawing} from "./drawing";
-import {Interpreter} from "../language/interpreter";
+import {Interpreter} from "../language/execution/Interpreter";
 
 export class Game {
     engine: Engine;
