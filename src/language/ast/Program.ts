@@ -1,9 +1,10 @@
-import {Instruction} from "./Instruction";
+import {Instr} from "./Instr";
+import {Asmt} from "./Asmt";
 
 export class Program {
-    readonly instructions: Array<Instruction>
+    readonly elements: Array<Asmt | Instr>
 
-    constructor(commands: Array<Instruction>) {
-        this.instructions = commands;
+    constructor(elements: Array<Asmt | Instr>) {
+        this.elements = elements;
     }
 }

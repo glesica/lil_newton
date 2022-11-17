@@ -2,7 +2,7 @@ import {Enum} from "./Enum";
 import {Name} from "./Name";
 import {Num} from "./Num";
 
-export class Instruction {
+export class Instr {
     readonly name: Name
     readonly args: Array<Enum|Name|Num>
 

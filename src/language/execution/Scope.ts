@@ -29,7 +29,19 @@ export class Scope {
         'NW': 315.0,
     };
 
+    private readonly vars: Record<string, any> = {};
+
     lookupEnum(key: string): any {
         return this.enums[key];
+    }
+
+    // TODO: There's no fundamental difference between vars and enums
+
+    setVar(key: string, value: any) {
+        this.vars[key] = value;
+    }
+
+    getVar(key: string): any {
+        return this.vars[key];
     }
 }

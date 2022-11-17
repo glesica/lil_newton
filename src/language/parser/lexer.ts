@@ -4,6 +4,7 @@ import {whitespaceExp} from "./whitespace";
 import {newlineExp} from "./newline";
 import {enumExp} from "./enum";
 import {numberExp} from "./number";
+import {asmtExp} from "./asmt";
 
 export enum LNToken {
     Whitespace,
@@ -11,6 +12,7 @@ export enum LNToken {
     Name,
     Number,
     Enum,
+    Assignment,
     EOF,
 }
 
@@ -22,4 +24,5 @@ export const lnLexer = new Lexer<LNToken>(
     [nameExp, LNToken.Name],
     [numberExp, LNToken.Number],
     [enumExp, LNToken.Enum],
+    [asmtExp, LNToken.Assignment],
 );

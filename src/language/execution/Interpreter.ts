@@ -1,12 +1,13 @@
 import {Turtle} from "../../game/turtle";
 import {Program} from "../ast/Program";
-import {Instruction} from "../ast/Instruction";
+import {Instr} from "../ast/Instr";
 import {Drawing} from "../../game/drawing";
 import {parseProgram} from "../parser/parser";
 import {Scope} from "./Scope";
 import {Enum} from "../ast/Enum";
 import {Color} from "excalibur";
 import {Num} from "../ast/Num";
+import {Asmt} from "../ast/Asmt";
 
 export class Interpreter {
     private readonly drawing: Drawing;
@@ -30,53 +31,62 @@ export class Interpreter {
     }
 
     async execute(program: Program) {
-        for (const instruction of program.instructions) {
-            await this.executeInstruction(instruction);
+        for (const element of program.elements) {
+            if (element instanceof Asmt) {
+                await this.executeAssignment(element);
+            } else if (element instanceof Instr) {
+                await this.executeInstruction(element);
+            } else {
+                console.error(element);
+                throw Error(`unknown element: ${element}`);
+            }
         }
     }
 
-    async executeInstruction(instruction: Instruction) {
-        switch (instruction.name.value) {
+    async executeAssignment(asmt: Asmt) {
+        this.scope.setVar(asmt.name.value, asmt.value);
+    }
+
+    // TODO: Now we write code to resolve symbols down to a concrete value
+    // The value can then be type-checked
+
+    async executeInstruction(instr: Instr) {
+        switch (instr.name.value) {
             case "color":
-                this.executeColor(instruction);
+                this.executeColor(instr);
                 break;
             case "head":
-                await this.executeHead(instruction);
+                await this.executeHead(instr);
                 break;
             case "sleep":
-                await this.executeSleep(instruction);
+                await this.executeSleep(instr);
                 break;
             case "thrust":
-                await this.executeThrust(instruction);
+                await this.executeThrust(instr);
                 break;
             case "turn":
-                await this.executeTurn(instruction);
-                break;
-            case "wait":
-                await this.executeWait(instruction);
+                await this.executeTurn(instr);
                 break;
             default:
-                throw new Error(`instruction ${instruction.name.value} not found`);
+                throw new Error(`instruction ${instr.name.value} not found`);
         }
     }
 
-    executeColor(instruction: Instruction) {
+    executeColor(instruction: Instr) {
         const colorArg = instruction.args[0] as Enum;
         const color = this.scope.lookupEnum(colorArg.value) as Color;
-
-        console.log(`color = ${color} colorArg.value = ${colorArg.value}`);
 
         this.drawing.setLineColor(color);
     }
 
-    async executeHead(instruction: Instruction) {
+    async executeHead(instruction: Instr) {
         const deltaArg = instruction.args[0] as Num;
         const delta = deltaArg.value - this.turtle.rotationInDegrees;
 
         await this.turtle.rotateBy(delta);
     }
 
-    async executeSleep(instruction: Instruction) {
+    async executeSleep(instruction: Instr) {
         const secondsArg = instruction.args[0] as Num;
         const seconds = secondsArg.value;
 
@@ -87,7 +97,7 @@ export class Interpreter {
         });
     }
 
-    async executeThrust(instruction: Instruction) {
+    async executeThrust(instruction: Instr) {
         const forceArg = instruction.args[0] as Num;
         const durationArg = instruction.args[1] as Num;
 
@@ -97,7 +107,7 @@ export class Interpreter {
         await this.turtle.thrust(force, duration);
     }
 
-    async executeTurn(instruction: Instruction) {
+    async executeTurn(instruction: Instr) {
         const directionArg = instruction.args[0] as Enum;
         const direction = this.scope.lookupEnum(directionArg.value) as number;
 
@@ -105,12 +115,6 @@ export class Interpreter {
         const delta = deltaArg.value;
 
         await this.turtle.rotateBy(direction * delta);
-    }
-
-    // TODO: This doesn't do anything, but we might want it later to allow async ops
-    async executeWait(instruction: Instruction) {
-        await Promise.all(this.tasks);
-        this.tasks = [];
     }
 }
 
